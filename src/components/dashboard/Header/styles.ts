@@ -13,12 +13,11 @@ export const Container = styled.header`
 `;
 
 export const Wrapper = styled.div<ContainerProps>`
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  width: 100%;
-  max-width: 122.4rem;
 
   .left-side {
     display: flex;

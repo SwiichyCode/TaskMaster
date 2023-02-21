@@ -12,7 +12,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export const Input = ({
   label,
   name,
-  register,
+  register = () => {},
   errors,
   required,
   ...props
