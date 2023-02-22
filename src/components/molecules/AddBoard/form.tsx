@@ -18,8 +18,8 @@ export const Form = ({ setOpen }: FormProps) => {
     e.preventDefault();
 
     try {
-      const docRef = await setDoc(doc(db, "projects", user.uid), {
-        uid: user.uid,
+      const docRef = await setDoc(doc(db, "projects", user?.uid), {
+        uid: user?.uid,
         board: [
           {
             name: name,
@@ -32,8 +32,6 @@ export const Form = ({ setOpen }: FormProps) => {
       console.error("Error adding document: ", error);
     }
   };
-
-  console.log(name);
 
   return (
     <Container>
