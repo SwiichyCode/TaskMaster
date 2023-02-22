@@ -5,25 +5,40 @@ import {
   signInWithEmailAndPassword,
   signOut,
   browserLocalPersistence,
-  sendEmailVerification,
   setPersistence,
   UserCredential,
 } from "firebase/auth";
 import { db } from "../config/firebase";
 import { auth } from "../config/firebase";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 interface UserType {
   email: any;
   uid: any;
 }
 
-const AuthContext = createContext({});
+type AuthContextType = {
+  user: UserType | null;
+  signUp: (email: string, password: string) => void;
+  logIn: (email: string, password: string) => Promise<UserCredential>;
+  logOut: () => void;
+};
 
-export const useAuth = () => useContext<any>(AuthContext);
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  signUp: () => {},
+  logIn: () => Promise.resolve({} as UserCredential),
+  logOut: () => {},
+});
 
-export const AuthContextProvider = ({ children }: any) => {
-  const [user, setUser] = useState<UserType>({ email: null, uid: null });
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthContextProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [user, setUser] = useState<UserType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -42,6 +57,7 @@ export const AuthContextProvider = ({ children }: any) => {
     await setDoc(doc(db, "users", user.uid), {
       uid: user?.uid,
       email: user?.email,
+      board: [],
     });
   };
 
@@ -59,8 +75,10 @@ export const AuthContextProvider = ({ children }: any) => {
     await signOut(auth);
   };
 
+  const value = { user, signUp, logIn, logOut };
+
   return (
-    <AuthContext.Provider value={{ user, signUp, logIn, logOut }}>
+    <AuthContext.Provider value={value}>
       {loading ? null : children}
     </AuthContext.Provider>
   );
