@@ -1,9 +1,7 @@
-import { Suspense } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useFirestoreData } from "../../hooks/useFirestoreData";
 import { DashboardHeader } from "../organims/DashboardHeader";
 import { Aside } from "../organims/Aside";
-import { EmptyBoard } from "../molecules/EmptyBoard";
 import { DashboardWrapper } from "../templates/DashboardWrapper";
 import styled from "styled-components";
 
@@ -18,9 +16,7 @@ export const Dashboard = () => {
     <DashboardWrapper>
       <DashboardHeader />
       <Container>
-        <Suspense fallback={"Loading..."}>
-          <Aside data={users} projects={board} loading={loadingUser} />
-        </Suspense>
+        <Aside data={users} projects={board} loading={loadingUser} />
 
         {/* <Board>{data?.board?.length === 0 && <EmptyBoard data={data} />}</Board> */}
       </Container>

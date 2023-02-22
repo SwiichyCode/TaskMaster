@@ -17,7 +17,7 @@ export const App = () => {
           <Route
             path="/dashboard"
             element={
-              <Suspense fallback={"Loading.."}>
+              <Suspense fallback={"Loading..."}>
                 <Dashboard />
               </Suspense>
             }
