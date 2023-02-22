@@ -5,24 +5,22 @@ import { AddBoardModal } from "../../molecules/AddBoard";
 
 interface AsideProps {
   data: any;
+  projects: any;
   loading: boolean;
 }
 
-export const Aside = ({ data, loading }: AsideProps) => {
+export const Aside = ({ data, projects, loading }: AsideProps) => {
   const { state: openIn, toggle: setOpenIn } = useToggle();
 
-  // console.log(projects.map((project: any) => project.name));
-
-  // console.log(data.projects.map((project: any) => project.name[0]));
   return (
     <Container>
       <Wrapper>
         <h2>ALL BOARDS (?)</h2>
 
         <ul>
-          {/* {projects.map((project: any, index: any) => (
+          {projects?.map((project: any, index: any) => (
             <li key={index}>{project.name}</li>
-          ))} */}
+          ))}
         </ul>
 
         <Button theme="primary" text="Add Board" onClick={setOpenIn} />

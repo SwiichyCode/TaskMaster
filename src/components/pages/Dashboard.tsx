@@ -9,18 +9,20 @@ import styled from "styled-components";
 
 export const Dashboard = () => {
   const { user } = useAuth();
-  const [data, loading] = useFirestoreData("users", user?.uid);
-  const projectDocument = useFirestoreData("projects", user?.uid);
+  const [users, loadingUser] = useFirestoreData("users", user?.uid);
+  const [projects, loadingProject] = useFirestoreData("projects", user?.uid);
+
+  const board = projects?.board || [];
 
   return (
     <DashboardWrapper>
       <DashboardHeader />
       <Container>
         <Suspense fallback={"Loading..."}>
-          <Aside data={data} loading={loading} />
+          <Aside data={users} projects={board} loading={loadingUser} />
         </Suspense>
 
-        <Board>{data?.board?.length === 0 && <EmptyBoard data={data} />}</Board>
+        {/* <Board>{data?.board?.length === 0 && <EmptyBoard data={data} />}</Board> */}
       </Container>
     </DashboardWrapper>
   );

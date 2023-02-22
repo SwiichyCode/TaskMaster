@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  QueryDocumentSnapshot,
-} from "firebase/firestore";
-import { db } from "../config/firebase"; // assuming firebase configuration is already set up
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "../config/firebase";
 
 export interface FirestoreData {
   [key: string]: any;
@@ -22,17 +16,21 @@ export const useFirestoreData = (
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const q = query(collection(db, collectionName), where("uid", "==", uid));
-      const querySnapshot = await getDocs(q);
-
-      querySnapshot.forEach((doc: QueryDocumentSnapshot<FirestoreData>) => {
-        setData(doc.data());
+    const unsubscribe = onSnapshot(
+      query(collection(db, collectionName), where("uid", "==", uid)),
+      (querySnapshot) => {
+        let data: FirestoreData = {};
+        querySnapshot.forEach((doc) => {
+          data = doc.data();
+        });
+        setData(data);
         setLoading(false);
-      });
-    };
+      }
+    );
 
-    fetchData();
+    return () => {
+      unsubscribe();
+    };
   }, [collectionName, uid]);
 
   return [data, loading];
